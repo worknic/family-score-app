@@ -1,115 +1,445 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>가족 생활 점수표</title>
-
-<style>
-body{
-font-family:Arial;
-background:#f3f3f3;
-text-align:center;
-padding:30px;
-}
-
-h1{
-font-size:40px;
-margin-bottom:30px;
-}
-
-table{
-margin:auto;
-background:white;
-border-collapse:collapse;
-width:600px;
-}
-
-th,td{
-border:1px solid #ddd;
-padding:12px;
-}
-
-th{
-background:#222;
-color:white;
-}
-
-button{
-padding:8px 14px;
-font-size:16px;
-margin:3px;
-cursor:pointer;
-}
-
-.score{
-font-weight:bold;
-font-size:20px;
-}
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>가족 습관 관리 시스템</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #222;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 42px;
+      margin: 10px 0 8px;
+    }
+    .sub {
+      text-align: center;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    .top-bar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .gift-box, .winner-box {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+    .gift-box input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+      margin-top: 8px;
+    }
+    .reset-btn {
+      height: 100%;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 12px;
+      background: #222;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+    .card.active {
+      border-color: #222;
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+    .score {
+      font-size: 34px;
+      font-weight: bold;
+      margin: 8px 0 4px;
+    }
+    .rank {
+      color: #777;
+      font-size: 14px;
+    }
+    .main {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 20px;
+    }
+    .panel {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+    .panel h3 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .day-btn {
+      padding: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .day-btn.active {
+      background: #222;
+      color: #fff;
+      border-color: #222;
+    }
+    .mission {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .mission-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mission-title {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .mission-note {
+      font-size: 13px;
+      color: #777;
+    }
+    .mission-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .point {
+      font-weight: bold;
+      min-width: 44px;
+      text-align: right;
+    }
+    .summary-box {
+      background: #fafafa;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .summary-row:last-child {
+      margin-bottom: 0;
+    }
+    .month-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    .month-table th, .month-table td {
+      border-bottom: 1px solid #eee;
+      padding: 10px 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .month-table th {
+      background: #fafafa;
+    }
+    @media (max-width: 900px) {
+      .cards, .main, .top-bar {
+        grid-template-columns: 1fr;
+      }
+      h1 { font-size: 32px; }
+      .days { grid-template-columns: repeat(5, 1fr); }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <h1>가족 습관 관리 시스템</h1>
+    <div class="sub">매일 체크하고, 한 달 뒤 가장 꾸준한 아이에게 선물을 주세요.</div>
 
-<h1>가족 생활 점수표</h1>
+    <div class="top-bar">
+      <div class="gift-box">
+        <strong>이달의 선물</strong>
+        <input id="giftInput" type="text" value="이번 달 선물" />
+      </div>
+      <div class="winner-box">
+        <strong>현재 1등</strong>
+        <div id="winnerText" style="margin-top:8px; font-size:18px; font-weight:bold;">-</div>
+      </div>
+      <button class="reset-btn" onclick="resetMonth()">월간 초기화</button>
+    </div>
 
-<table>
+    <div class="cards" id="cards"></div>
 
-<tr>
-<th>이름</th>
-<th>점수</th>
-<th>추가</th>
-<th>감점</th>
-</tr>
+    <div class="main">
+      <div class="panel">
+        <h3 id="selectedChildTitle">오늘 체크하기</h3>
+        <div class="days" id="days"></div>
+        <div id="missions"></div>
 
-<tr>
-<td>하준</td>
-<td class="score" id="s1">0</td>
-<td>
-<button onclick="add('s1')">+1</button>
-</td>
-<td>
-<button onclick="minus('s1')">-1</button>
-</td>
-</tr>
+        <div class="summary-box">
+          <div class="summary-row">
+            <span>선택한 날짜</span>
+            <strong id="selectedDayText">1일</strong>
+          </div>
+          <div class="summary-row">
+            <span>오늘 획득 점수</span>
+            <strong id="dailyScoreText">0점</strong>
+          </div>
+          <div class="summary-row">
+            <span>이달 누적 점수</span>
+            <strong id="monthlyScoreText">0점</strong>
+          </div>
+        </div>
+      </div>
 
-<tr>
-<td>하니</td>
-<td class="score" id="s2">0</td>
-<td>
-<button onclick="add('s2')">+1</button>
-</td>
-<td>
-<button onclick="minus('s2')">-1</button>
-</td>
-</tr>
+      <div class="panel">
+        <h3>월간 기록</h3>
+        <table class="month-table">
+          <thead>
+            <tr>
+              <th>이름</th>
+              <th>총점</th>
+              <th>순위</th>
+            </tr>
+          </thead>
+          <tbody id="monthSummaryBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-<tr>
-<td>예니</td>
-<td class="score" id="s3">0</td>
-<td>
-<button onclick="add('s3')">+1</button>
-</td>
-<td>
-<button onclick="minus('s3')">-1</button>
-</td>
-</tr>
+  <script>
+    const children = [
+      { id: 1, name: "하준" },
+      { id: 2, name: "하니" },
+      { id: 3, name: "예니" }
+    ];
 
-</table>
+    const missions = [
+      { id: 1, title: "자기 역할 루틴 완료", note: "각자 맡은 하루 루틴 수행", points: 5 },
+      { id: 2, title: "아침 스스로 준비하기", note: "세수, 옷, 준비물 챙기기", points: 3 },
+      { id: 3, title: "독서습관 실천", note: "정해진 시간만큼 읽기", points: 3 },
+      { id: 4, title: "숙제 및 스스로 학습", note: "숙제와 자율학습", points: 4 },
+      { id: 5, title: "정리정돈", note: "책상, 방, 생활공간 정리", points: 3 },
+      { id: 6, title: "부모님 서포트", note: "집안일 돕기, 부탁 수행", points: 3 },
+      { id: 7, title: "형제자매 관계", note: "배려하고 사이좋게 지내기", points: 4 }
+    ];
 
-<script>
+    const daysInMonth = 31;
+    let selectedChildId = 1;
+    let selectedDay = 1;
 
-function add(id){
-let v=document.getElementById(id)
-v.innerHTML=parseInt(v.innerHTML)+1
-}
+    function createInitialData() {
+      const data = {};
+      children.forEach(child => {
+        data[child.id] = {};
+        for (let d = 1; d <= daysInMonth; d++) {
+          data[child.id][d] = [];
+        }
+      });
+      return data;
+    }
 
-function minus(id){
-let v=document.getElementById(id)
-v.innerHTML=parseInt(v.innerHTML)-1
-}
+    let records = JSON.parse(localStorage.getItem("familyHabitRecords")) || createInitialData();
+    let gift = localStorage.getItem("familyHabitGift") || "이번 달 선물";
 
-</script>
+    document.getElementById("giftInput").value = gift;
+    document.getElementById("giftInput").addEventListener("input", (e) => {
+      gift = e.target.value;
+      localStorage.setItem("familyHabitGift", gift);
+    });
 
+    function saveAll() {
+      localStorage.setItem("familyHabitRecords", JSON.stringify(records));
+    }
+
+    function getChildTotal(childId) {
+      let total = 0;
+      for (let d = 1; d <= daysInMonth; d++) {
+        const checked = records[childId][d];
+        checked.forEach(mId => {
+          const m = missions.find(x => x.id === mId);
+          if (m) total += m.points;
+        });
+      }
+      return total;
+    }
+
+    function getDayTotal(childId, day) {
+      let total = 0;
+      records[childId][day].forEach(mId => {
+        const m = missions.find(x => x.id === mId);
+        if (m) total += m.points;
+      });
+      return total;
+    }
+
+    function getRanking() {
+      return [...children]
+        .map(c => ({ ...c, total: getChildTotal(c.id) }))
+        .sort((a, b) => b.total - a.total);
+    }
+
+    function renderCards() {
+      const container = document.getElementById("cards");
+      const ranking = getRanking();
+
+      container.innerHTML = "";
+      children.forEach(child => {
+        const rank = ranking.findIndex(r => r.id === child.id) + 1;
+        const card = document.createElement("div");
+        card.className = "card" + (child.id === selectedChildId ? " active" : "");
+        card.onclick = () => {
+          selectedChildId = child.id;
+          renderAll();
+        };
+
+        card.innerHTML = `
+          <h2>${child.name}</h2>
+          <div class="score">${getChildTotal(child.id)}점</div>
+          <div class="rank">현재 ${rank}등</div>
+        `;
+        container.appendChild(card);
+      });
+
+      const winner = ranking[0];
+      document.getElementById("winnerText").innerText = winner ? `${winner.name} (${winner.total}점)` : "-";
+    }
+
+    function renderDays() {
+      const container = document.getElementById("days");
+      container.innerHTML = "";
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const btn = document.createElement("button");
+        btn.className = "day-btn" + (d === selectedDay ? " active" : "");
+        btn.innerText = d + "일";
+        btn.onclick = () => {
+          selectedDay = d;
+          renderAll();
+        };
+        container.appendChild(btn);
+      }
+    }
+
+    function toggleMission(missionId) {
+      const checked = records[selectedChildId][selectedDay];
+      const index = checked.indexOf(missionId);
+
+      if (index > -1) {
+        checked.splice(index, 1);
+      } else {
+        checked.push(missionId);
+      }
+
+      saveAll();
+      renderAll();
+    }
+
+    function renderMissions() {
+      const container = document.getElementById("missions");
+      const checked = records[selectedChildId][selectedDay];
+      container.innerHTML = "";
+
+      missions.forEach(m => {
+        const row = document.createElement("div");
+        row.className = "mission";
+        row.innerHTML = `
+          <div class="mission-left">
+            <div class="mission-title">${m.title}</div>
+            <div class="mission-note">${m.note}</div>
+          </div>
+          <div class="mission-right">
+            <div class="point">+${m.points}</div>
+            <input type="checkbox" ${checked.includes(m.id) ? "checked" : ""} />
+          </div>
+        `;
+        row.querySelector("input").addEventListener("change", () => toggleMission(m.id));
+        container.appendChild(row);
+      });
+    }
+
+    function renderSummary() {
+      const child = children.find(c => c.id === selectedChildId);
+      document.getElementById("selectedChildTitle").innerText = `${child.name} 체크하기`;
+      document.getElementById("selectedDayText").innerText = `${selectedDay}일`;
+      document.getElementById("dailyScoreText").innerText = `${getDayTotal(selectedChildId, selectedDay)}점`;
+      document.getElementById("monthlyScoreText").innerText = `${getChildTotal(selectedChildId)}점`;
+    }
+
+    function renderMonthSummary() {
+      const body = document.getElementById("monthSummaryBody");
+      const ranking = getRanking();
+
+      body.innerHTML = ranking.map((r, i) => `
+        <tr>
+          <td>${r.name}</td>
+          <td>${r.total}점</td>
+          <td>${i + 1}등</td>
+        </tr>
+      `).join("");
+    }
+
+    function resetMonth() {
+      if (!confirm("이번 달 기록을 모두 초기화할까요?")) return;
+      records = createInitialData();
+      saveAll();
+      renderAll();
+    }
+
+    function renderAll() {
+      renderCards();
+      renderDays();
+      renderMissions();
+      renderSummary();
+      renderMonthSummary();
+    }
+
+    renderAll();
+  </script>
 </body>
 </html>
