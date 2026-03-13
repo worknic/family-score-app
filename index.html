@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>가족 생활 점수표</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f3f3f3;
+text-align:center;
+padding:30px;
+}
+
+h1{
+font-size:40px;
+margin-bottom:30px;
+}
+
+table{
+margin:auto;
+background:white;
+border-collapse:collapse;
+width:600px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:12px;
+}
+
+th{
+background:#222;
+color:white;
+}
+
+button{
+padding:8px 14px;
+font-size:16px;
+margin:3px;
+cursor:pointer;
+}
+
+.score{
+font-weight:bold;
+font-size:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>가족 생활 점수표</h1>
+
+<table>
+
+<tr>
+<th>이름</th>
+<th>점수</th>
+<th>추가</th>
+<th>감점</th>
+</tr>
+
+<tr>
+<td>하준</td>
+<td class="score" id="s1">0</td>
+<td>
+<button onclick="add('s1')">+1</button>
+</td>
+<td>
+<button onclick="minus('s1')">-1</button>
+</td>
+</tr>
+
+<tr>
+<td>하니</td>
+<td class="score" id="s2">0</td>
+<td>
+<button onclick="add('s2')">+1</button>
+</td>
+<td>
+<button onclick="minus('s2')">-1</button>
+</td>
+</tr>
+
+<tr>
+<td>예니</td>
+<td class="score" id="s3">0</td>
+<td>
+<button onclick="add('s3')">+1</button>
+</td>
+<td>
+<button onclick="minus('s3')">-1</button>
+</td>
+</tr>
+
+</table>
+
+<script>
+
+function add(id){
+let v=document.getElementById(id)
+v.innerHTML=parseInt(v.innerHTML)+1
+}
+
+function minus(id){
+let v=document.getElementById(id)
+v.innerHTML=parseInt(v.innerHTML)-1
+}
+
+</script>
+
+</body>
+</html>
